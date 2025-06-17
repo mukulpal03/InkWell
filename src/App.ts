@@ -1,9 +1,17 @@
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import userRoutes from "./routes/user";
+import { globalErrorHandler } from "./utils/errorHandler";
 
 const app = express();
 
-app.get("/", (_, res) => {
-  res.send("Hello World!");
-});
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+
+app.use("/api/v1/users", userRoutes);
+
+app.use(globalErrorHandler);
 
 export default app;
