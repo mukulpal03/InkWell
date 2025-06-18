@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 
 export interface IUser extends Document {
@@ -11,6 +11,14 @@ export interface IUser extends Document {
   updatedAt?: Date;
   isPasswordCorrect: (password: string) => boolean;
   generateJWT: () => string;
+}
+
+export interface IApiKey extends Document {
+  _id: string;
+  key: string;
+  user: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type UserRole = "user" | "admin";
@@ -28,4 +36,12 @@ export interface RegisterData {
 export interface loginData {
   email: string;
   password: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
 }

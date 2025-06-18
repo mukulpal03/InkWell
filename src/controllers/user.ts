@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import {
+  findUserById,
+  generateApiKeyForUser,
   validateAndCreateUser,
   validateCredentialsAndGenerateToken,
 } from "../services/user";
@@ -42,6 +44,33 @@ export const loginUser = async (req: Request, res: Response) => {
     );
 };
 
-export const logoutUser = async (req: Request, res: Response) => {};
+export const logoutUser = async (req: Request, res: Response) => {
+  return res
+    .status(200)
+    .clearCookie("token", cookieOptions)
+    .json(new ApiResponse(200, "User logged out successfully", {}));
+};
 
-export const getUser = async (req: Request, res: Response) => {};
+export const getUser = async (req: Request, res: Response) => {
+  const userId = req.user._id;
+
+  const user = await findUserById(userId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, `Welcome ${user.username}`, user));
+};
+
+export const generateApiKey = async (req: Request, res: Response) => {
+  const userId = req.user._id;
+
+  const apiKey = await generateApiKeyForUser(userId);
+
+  return res.status(200).json(
+    new ApiResponse(201, "Api key generated successfully", {
+      key: apiKey.key,
+      username: req.user.username,
+      email: req.user.email,
+    })
+  );
+};
