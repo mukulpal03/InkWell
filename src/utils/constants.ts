@@ -13,3 +13,11 @@ export const cookieOptions = {
   sameSite: "strict",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 } as const;
+
+export const postStatusEnum = {
+  PENDING: "pending",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+} as const;
+
+export const availablePostStatus = Object.values(postStatusEnum);

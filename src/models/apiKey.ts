@@ -18,6 +18,6 @@ const apiKeySchema = new mongoose.Schema<IApiKey>(
   { timestamps: true }
 );
 
-const ApiKey = mongoose.model("ApiKey", apiKeySchema);
+const ApiKey = mongoose.model<IApiKey>("ApiKey", apiKeySchema);
 
 export default ApiKey;
