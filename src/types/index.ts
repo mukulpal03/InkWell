@@ -34,6 +34,15 @@ export interface IPost extends Document {
   updatedAt?: Date;
 }
 
+export interface IPostReview extends Document {
+  _id: string;
+  post: Types.ObjectId;
+  isApproved: boolean;
+  comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export type PostStatus = "pending" | "approved" | "rejected";
 
 export interface AsyncRequestHandler {

@@ -2,6 +2,7 @@ import Post from "../models/post";
 import { IPost, postData } from "../types";
 import voca from "voca";
 import ApiError from "../utils/apiError";
+import { postStatusEnum } from "../utils/constants";
 
 export const validateAndCreatePost = async (
   postData: postData,
@@ -35,7 +36,7 @@ export const getAllPublishedPosts = async () => {
     const posts: IPost[] = await Post.aggregate([
       {
         $match: {
-          status: "published",
+          status: postStatusEnum.APPROVED,
         },
       },
       {
@@ -86,7 +87,7 @@ export const getPostById = async (postId: string) => {
   try {
     const post = await Post.findOne({
       _id: postId,
-      status: "published",
+      status: postStatusEnum.APPROVED,
     }).populate("user", "_id username email");
 
     if (!post) throw new ApiError(404, "Post not found");
