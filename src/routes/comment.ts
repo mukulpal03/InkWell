@@ -8,10 +8,12 @@ import {
 } from "../controllers/comment";
 import { asyncHandler } from "../utils/asyncHandler";
 import { isCommentOwner } from "../middlewares/ownerPermission";
+import { validateKey } from "../middlewares/apiKey";
 
 const router = Router({ mergeParams: true });
 
 router.use(isLoggedIn);
+router.use(validateKey);
 
 router
   .route("/")

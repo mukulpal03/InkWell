@@ -11,10 +11,12 @@ import { isLoggedIn } from "../middlewares/auth";
 import { isPostOwner } from "../middlewares/ownerPermission";
 import { validateData } from "../middlewares/validate";
 import { createPostSchema, updatePostSchema } from "../validators/post";
+import { validateKey } from "../middlewares/apiKey";
 
 const router = Router();
 
 router.use(isLoggedIn);
+router.use(validateKey);
 
 router
   .route("/")

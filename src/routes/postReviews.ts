@@ -7,12 +7,15 @@ import {
 } from "../controllers/postReviews";
 import { asyncHandler } from "../utils/asyncHandler";
 import { authorizeAdmin } from "../middlewares/admin";
+import { validateKey } from "../middlewares/apiKey";
 
 const router = Router();
 
 router.use(isLoggedIn);
 
 router.use(authorizeAdmin);
+
+router.use(validateKey);
 
 router.route("/").get(asyncHandler(getAllPendingPosts));
 
