@@ -10,8 +10,8 @@ export const createPostSchema = z.object({
     .min(1, "Content cannot be empty"),
 
   category: z
-    .string({ required_error: "Category ID is required" })
-    .min(1, "Category ID cannot be empty"),
+    .string({ required_error: "Category is required" })
+    .min(1, "Category cannot be empty"),
 });
 
 export const updatePostSchema = z.object({
@@ -19,5 +19,5 @@ export const updatePostSchema = z.object({
 
   content: z.string().min(1, "Content cannot be empty").optional(),
 
-  category: z.string().min(1, "Category ID cannot be empty").optional(),
+  category: z.string().min(1, "Category cannot be empty").optional(),
 });

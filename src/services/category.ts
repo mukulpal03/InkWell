@@ -23,7 +23,7 @@ export const validateAndAddCategory = async (name: string) => {
 
 export const getAllCategories = async () => {
   try {
-    const categories = await Category.find({});
+    const categories = await Category.find({}).select("_id name");
 
     return categories;
   } catch (error: any) {

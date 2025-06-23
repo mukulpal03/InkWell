@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { IPost } from "../types";
 import { availablePostStatus, postStatusEnum } from "../utils/constants";
+import Comment from "./comment";
 
 const postSchema = new mongoose.Schema<IPost>(
   {
@@ -35,6 +36,12 @@ const postSchema = new mongoose.Schema<IPost>(
   },
   { timestamps: true }
 );
+
+postSchema.post("findOneAndDelete", async function (doc: IPost) {
+  if (doc) {
+    await Comment.deleteMany({ post: doc._id });
+  }
+});
 
 const Post = mongoose.model<IPost>("Post", postSchema);
 

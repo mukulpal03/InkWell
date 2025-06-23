@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Comment from "../models/comment";
 import Post from "../models/post";
 import ApiError from "../utils/apiError";
@@ -8,7 +9,7 @@ export const getAllComments = async (postId: string) => {
     const comments = await Comment.aggregate([
       {
         $match: {
-          post: postId,
+          post: new mongoose.Types.ObjectId(postId),
         },
       },
       {
@@ -42,8 +43,6 @@ export const getAllComments = async (postId: string) => {
         $project: {
           _id: 1,
           content: 1,
-          createdAt: 1,
-          updatedAt: 1,
           user: {
             _id: 1,
             username: 1,
@@ -54,8 +53,6 @@ export const getAllComments = async (postId: string) => {
             title: 1,
             slug: 1,
             status: 1,
-            createdAt: 1,
-            updatedAt: 1,
           },
         },
       },
@@ -83,7 +80,10 @@ export const validateAndCreateComment = async (
   content: string
 ) => {
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findOne({
+      _id: postId,
+      status: postStatusEnum.APPROVED,
+    });
 
     if (!post) throw new ApiError(404, "Post not found");
 
