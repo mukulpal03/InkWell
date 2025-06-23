@@ -30,6 +30,7 @@ export interface IPost extends Document {
   slug?: string;
   status?: PostStatus;
   user?: Types.ObjectId;
+  category?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -43,6 +44,8 @@ export interface IPostReview extends Document {
   updatedAt?: Date;
 }
 
+export type PostStatus = "pending" | "approved" | "rejected";
+
 export interface IComment extends Document {
   _id: string;
   post: Types.ObjectId;
@@ -52,7 +55,12 @@ export interface IComment extends Document {
   updatedAt?: Date;
 }
 
-export type PostStatus = "pending" | "approved" | "rejected";
+export interface ICategory extends Document {
+  _id: string;
+  name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export interface AsyncRequestHandler {
   (req: Request, res: Response, next: NextFunction): Promise<any>;
@@ -72,6 +80,7 @@ export interface loginData {
 export interface postData {
   title: string;
   content: string;
+  category: string;
 }
 
 export interface PaginateOptions {

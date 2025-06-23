@@ -5,6 +5,7 @@ import userRoutes from "./routes/user";
 import postRoutes from "./routes/post";
 import postReviewRoutes from "./routes/postReviews";
 import commentRoutes from "./routes/comment";
+import categoryRoutes from "./routes/category";
 import { globalErrorHandler } from "./utils/errorHandler";
 
 const app = express();
@@ -17,6 +18,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/admin/posts", postReviewRoutes);
 app.use("/api/v1/posts/:postId/comments", commentRoutes);
+app.use("/api/v1/categories", categoryRoutes);
 
 app.use(globalErrorHandler);
 

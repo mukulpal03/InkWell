@@ -3,12 +3,13 @@ import { IPost, postData } from "../types";
 import voca from "voca";
 import ApiError from "../utils/apiError";
 import { postStatusEnum } from "../utils/constants";
+import Category from "../models/category";
 
 export const validateAndCreatePost = async (
   postData: postData,
   userId: string
 ) => {
-  const { title } = postData;
+  const { title, content, category } = postData;
 
   const slug = voca.slugify(title);
 
@@ -17,7 +18,17 @@ export const validateAndCreatePost = async (
 
     if (existingPost) throw new ApiError(400, "Post already exists");
 
-    const post = await Post.create({ ...postData, slug, user: userId });
+    const existingCategory = await Category.findOne({ name: category });
+
+    if (!existingCategory) throw new ApiError(400, "Category does not exist");
+
+    const post = await Post.create({
+      title,
+      content,
+      slug,
+      user: userId,
+      category: existingCategory._id,
+    });
 
     return post;
   } catch (error: any) {
@@ -110,8 +121,18 @@ export const validateAndUpdatePost = async (postId: string, data: any) => {
       _id: postId,
     }).populate("user", "_id username email");
 
+    if (!post) throw new ApiError(404, "Post not found");
+
     if (data.title && data.title !== post.title)
       post.slug = voca.slugify(data.title);
+
+    if (data.category && data.category !== post.category) {
+      const existingCategory = await Category.findOne({ name: data.category });
+
+      if (!existingCategory) throw new ApiError(400, "Category does not exist");
+
+      post.category = existingCategory._id;
+    }
 
     for (const key of Object.keys(data)) {
       post[key] = data[key];
