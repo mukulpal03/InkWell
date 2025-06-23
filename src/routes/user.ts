@@ -8,12 +8,18 @@ import {
   registerUser,
 } from "../controllers/user";
 import { isLoggedIn } from "../middlewares/auth";
+import { validateData } from "../middlewares/validate";
+import { createUserSchema, loginUserSchema } from "../validators/user";
 
 const router = Router();
 
-router.route("/register").post(asyncHandler(registerUser));
+router
+  .route("/register")
+  .post(validateData(createUserSchema), asyncHandler(registerUser));
 
-router.route("/login").post(asyncHandler(loginUser));
+router
+  .route("/login")
+  .post(validateData(loginUserSchema), asyncHandler(loginUser));
 
 router.use(isLoggedIn);
 
